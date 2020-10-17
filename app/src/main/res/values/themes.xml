@@ -1,0 +1,138 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CustomWidgets" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+<!--        <item name="android:actionMenuTextColor">@color/link_blue</item>-->
+<!--        <item name="android:actionMenuTextAppearance">@style/Maple.Menu.TextAppearance</item>-->
+    </style>
+
+  <style name="Toolbar.Title" parent="@style/Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Custom.Menu.TextAppearance" parent="@style/Custom.Title.M">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Custom.Switch" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@android:color/darker_gray</item>
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
+
+    <!--Text Appearance-->
+    <style name="Custom.Text" parent="TextAppearance.AppCompat">
+<!--        <item name="android:fontFamily">@font/tt_commons</item>-->
+    </style>
+
+    <style name="Custom.Gold.Text" parent="Custom.Text">
+        <item name="android:textColor">@color/gold</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Custom.Title" parent="Custom.Text">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontWeight">500</item>
+    </style>
+
+    <style name="Custom.Title.XXXL" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_36</item>
+    </style>
+
+    <style name="Custom.Title.XXL" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_30</item>
+    </style>
+
+    <style name="Custom.Title.XL" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_24</item>
+    </style>
+
+    <style name="Custom.Title.L" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_21</item>
+    </style>
+
+    <style name="Custom.Title.M" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_19</item>
+    </style>
+
+    <style name="Custom.Title.S" parent="Custom.Title">
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="Custom.Subtitle.L" parent="Custom.Text">
+        <item name="android:textColor">@color/subtitle_color</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
+
+    <style name="Custom.Subtitle.M" parent="Custom.Text">
+        <item name="android:textColor">@color/subtitle_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
+    <style name="Custom.Subtitle.S" parent="Custom.Text">
+        <item name="android:textColor">@color/subtitle_color</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="Custom.Price" parent="Custom.Text">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Custom.Price.XXL" parent="Custom.Text">
+        <item name="android:textSize">@dimen/text_size_38</item>
+    </style>
+
+    <!--Button Style-->
+    <style name="Custom.Button" parent="Base.Widget.AppCompat.TextView">
+        <item name="android:paddingTop">@dimen/spacing_large</item>
+        <item name="android:paddingStart">@dimen/spacing_large</item>
+        <item name="android:paddingBottom">@dimen/spacing_large</item>
+        <item name="android:paddingEnd">@dimen/spacing_large</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginStart">@dimen/spacing_very_large</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_very_large</item>
+    </style>
+    <style name="Custom.Button.Blue" parent="Custom.Button">
+        <item name="android:background">@drawable/btn_deepblue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@style/Custom.Title.S</item>
+    </style>
+    <style name="Custom.Button.GoldGradient" parent="Custom.Button">
+        <item name="android:background">@drawable/btn_gold_gradient</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Custom.Button.Gold" parent="Custom.Button">
+        <item name="android:background">@drawable/btn_gold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Custom.Button.White" parent="Custom.Button">
+        <item name="android:background">@drawable/btn_gray_outline</item>
+        <item name="android:textColor">@color/deep_blue</item>
+        <item name="android:textAppearance">@style/Custom.Title.S</item>
+    </style>
+    <style name="Custom.Button.BlueOutline" parent="Custom.Button">
+        <item name="android:background">@drawable/btn_white</item>
+        <item name="android:textColor">@color/deep_blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@style/Custom.Title.S</item>
+    </style>
+
+    <style name="Custom.EditText.Black.Underline" parent="@android:style/Widget.EditText">
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+</resources>

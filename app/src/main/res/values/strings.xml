@@ -1,0 +1,10 @@
+<resources >
+    <string name="app_name">CustomWidgets</string>
+    <string name="cta_ok">OK</string>
+    <string name="cta_cancel">Cancel</string>
+    <string name="cta_discard">Discard</string>
+    <string name="cta_confirm">Confirm</string>
+    <string name="cta_find_stores">Find stores</string>
+    <string name="cta_dismiss">Dismiss</string>
+    <string name="cta_retry">Retry</string>
+</resources>
