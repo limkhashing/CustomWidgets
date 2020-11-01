@@ -7,12 +7,13 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import java.util.Calendar
 
-class DateEditText: AppCompatEditText {
+class DateEditText : AppCompatEditText {
     val dividerCharacter = "/"
     private val editText = this@DateEditText
     private var current = ""
-    private val ddmmyyyy = "DDMMYYYY"
+    private val dateFormat = "DDMMYYYY"
     private val cal = Calendar.getInstance()
+    var isComplete = false
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
@@ -26,7 +27,7 @@ class DateEditText: AppCompatEditText {
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString() != current) {
+                if (s.toString() != current && s.toString() != "") {
                     var clean = s.toString().replace("[^\\d.]|\\.".toRegex(), "")
                     val cleanC = current.replace("[^\\d.]|\\.".toRegex(), "")
 
@@ -41,7 +42,17 @@ class DateEditText: AppCompatEditText {
                     if (clean == cleanC) sel--
 
                     if (clean.length < 8) {
-                        clean += ddmmyyyy.substring(clean.length)
+                        if (isComplete && editText.selectionStart != 9) {
+                            clean = when {
+                                editText.selectionStart <= 1 -> // When deleting Days
+                                    clean.removeRange(editText.selectionStart, clean.length)
+                                editText.selectionStart <= 4 -> // When deleting Months
+                                    clean.removeRange(editText.selectionStart - 1, clean.length)
+                                else -> // When deleting Years
+                                    clean.removeRange(editText.selectionStart - 2, clean.length)
+                            }
+                        }
+                        clean += dateFormat.substring(clean.length)
                     } else {
                         //This part makes sure that when we finish entering numbers
                         //the date is correct, fixing it otherwise
@@ -61,14 +72,30 @@ class DateEditText: AppCompatEditText {
                         clean = String.format("%02d%02d%02d", day, mon, year)
                     }
 
+                    if (clean == dateFormat) {
+                        editText.setText("")
+                        return
+                    }
+
                     clean = String.format("%s$dividerCharacter%s$dividerCharacter%s", clean.substring(0, 2),
                         clean.substring(2, 4),
                         clean.substring(4, 8))
 
                     sel = if (sel < 0) 0 else sel
+                    if (isComplete)
+                        sel = editText.selectionStart
+
                     current = clean
                     editText.setText(current)
-                    editText.setSelection(if (sel < current.count()) sel else current.count())
+                    editText.setSelection(
+                        if (sel < current.count()) {
+                            isComplete = false
+                            sel
+                        } else {
+                            isComplete = true
+                            current.count()
+                        }
+                    )
                 }
             }
 

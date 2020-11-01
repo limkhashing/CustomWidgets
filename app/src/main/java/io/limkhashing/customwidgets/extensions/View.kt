@@ -2,7 +2,9 @@ package io.limkhashing.customwidgets.extensions
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.view.children
 import io.limkhashing.customwidgets.utils.AppConstants
 
 
@@ -22,4 +24,15 @@ fun View.afterLayout(what: () -> Unit) {
             }
         })
     }
+}
+
+fun ViewGroup.disableOnTouch() {
+    children.forEach {
+        if (it is ViewGroup)
+            it.disableOnTouch()
+        else {
+            it.setOnTouchListener(null)
+        }
+    }
+    setOnTouchListener(null)
 }

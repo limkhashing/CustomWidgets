@@ -14,13 +14,31 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.google.gson.Gson
 import io.limkhashing.customwidgets.R
+import io.limkhashing.customwidgets.models.ErrorResponse
 import io.limkhashing.customwidgets.utils.DrawableUtils
 import io.limkhashing.customwidgets.utils.ViewState
+import io.limkhashing.customwidgets.utils.ViewState.*
+import retrofit2.HttpException
+import java.io.IOException
 
+
+data class DialogBuilder(
+    val state: ViewState,
+    val title: String? = null,
+    val msg: String? = null,
+    val cancelable: Boolean = false,
+    val iconResID: Int = 0,
+    val showNegativeButton: Boolean = false,
+    val showPositiveButton: Boolean = false,
+    val negativeButtonText: String? = null,
+    val positiveButtonText: String? = null,
+    val negativeAction: () -> Unit = {},
+    val positiveAction: () -> Unit = {}
+)
 
 /**
  * Alert Dialog implementation for all.
@@ -95,21 +113,9 @@ fun Context.createAlertDialog(
     }!!
 }
 
-fun AppCompatActivity.createLoader(
-    state: ViewState,
-    title: String? = null,
-    msg: String? = null,
-    cancelable: Boolean = false,
-    iconResID: Int,
-    showNegativeButton: Boolean = false,
-    showPositiveButton: Boolean = false,
-    negativeButtonText: String = resources.getString(R.string.cta_dismiss),
-    positiveButtonText: String = resources.getString(R.string.cta_retry),
-    negativeAction: () -> Unit = {},
-    positiveAction: () -> Unit = {}
-): AlertDialog {
+fun Context.createLoader(dialogBuilder: DialogBuilder): AlertDialog {
     return let {
-        val v = LayoutInflater.from(it).inflate(R.layout.view_alert_loader, null)
+        val dialogView = LayoutInflater.from(it).inflate(R.layout.view_alert_loader, null)
             .apply {
                 val layoutIcon = findViewById<View>(R.id.layout_icon)
                 val stateImage = findViewById<ImageView>(R.id.iv_icon)
@@ -121,54 +127,93 @@ fun AppCompatActivity.createLoader(
                 val dividerVertical = findViewById<View>(R.id.divider_v)
                 val dividerHorizontal = findViewById<View>(R.id.divider_h)
 
-                titleTextView.text = title
-                descTextView.text = msg
-                positiveTextView.text = positiveButtonText
-                negativeTextView.text = negativeButtonText
+                dialogBuilder.apply {
+                    titleTextView.text = title
+                    descTextView.text = msg
+                    positiveTextView.text = positiveButtonText ?: resources.getString(R.string.cta_retry)
+                    negativeTextView.text = negativeButtonText ?: resources.getString(R.string.cta_dismiss)
 
-                titleTextView.visibility = if (title != null) View.VISIBLE else View.GONE
-                descTextView.visibility = if (msg != null) View.VISIBLE else View.GONE
-                dividerHorizontal.visibility = if (showNegativeButton || showPositiveButton) View.VISIBLE else View.GONE
-                dividerVertical.visibility = if (showNegativeButton && showPositiveButton) View.VISIBLE else View.GONE
-                positiveTextView.visibility = if (showNegativeButton) View.VISIBLE else View.GONE
-                negativeTextView.visibility = if (showPositiveButton) View.VISIBLE else View.GONE
+                    titleTextView.visibility = if (title != null) View.VISIBLE else View.GONE
+                    descTextView.visibility = if (msg != null) View.VISIBLE else View.GONE
+                    dividerHorizontal.visibility = if (showNegativeButton || showPositiveButton) View.VISIBLE else View.GONE
+                    dividerVertical.visibility = if (showNegativeButton && showPositiveButton) View.VISIBLE else View.GONE
+                    positiveTextView.visibility = if (showPositiveButton) View.VISIBLE else View.GONE
+                    negativeTextView.visibility = if (showNegativeButton) View.VISIBLE else View.GONE
 
-                when (state) {
-                    ViewState.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        stateImage.setImageDrawable(
-                            DrawableUtils.createDrawable(
-                                GradientDrawable.OVAL,
-                                0,
-                                R.dimen.size_3,
-                                R.color.white_with_alpha_30,
-                                0
+                    when (state) {
+                        LOADING -> {
+                            progressBar.visibility = View.VISIBLE
+                            stateImage.setImageDrawable(
+                                DrawableUtils.createDrawable(
+                                    GradientDrawable.OVAL,
+                                    0,
+                                    R.dimen.size_3,
+                                    R.color.white_with_alpha_30,
+                                    0
+                                )
                             )
-                        )
-                    }
-                    else -> {
-                        progressBar.visibility = View.INVISIBLE
-                        setShowOrHideIcon(iconResID, layoutIcon, stateImage)
+                        }
+                        CONTENT -> {
+                            progressBar.visibility = View.INVISIBLE
+                            setShowOrHideIcon(iconResID, layoutIcon, stateImage)
+                        }
+                        ERROR -> {
+                            progressBar.visibility = View.INVISIBLE
+                            stateImage.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    if (iconResID != 0) iconResID else R.drawable.ic_error,
+                                    null
+                                )
+                            )
+                        }
                     }
                 }
             }
         AlertDialog.Builder(it)
-            .setView(v)
+            .setView(dialogView)
             .create()
             .apply {
                 window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                setCancelable(cancelable)
+                setCancelable(dialogBuilder.cancelable)
 
-                v.findViewById<TextView>(R.id.tv_negative).setOnClickListener { negativeAction.invoke() }
-                v.findViewById<TextView>(R.id.tv_positive).setOnClickListener { positiveAction.invoke() }
+                dialogView.findViewById<TextView>(R.id.tv_positive).setOnClickListener {
+                    dismiss()
+                    dialogBuilder.positiveAction.invoke()
+                }
+                dialogView.findViewById<TextView>(R.id.tv_negative).setOnClickListener {
+                    dismiss()
+                    dialogBuilder.negativeAction.invoke()
+                }
             }
     }
 }
 
-fun AppCompatActivity.setShowOrHideIcon(iconResID: Int, layoutIcon: View, stateImage: ImageView) {
-    if (iconResID != 0)  {
+fun Context.setShowOrHideIcon(iconResID: Int, layoutIcon: View, stateImage: ImageView) {
+    if (iconResID != 0) {
         layoutIcon.visibility = View.VISIBLE
         stateImage.setImageDrawable(ResourcesCompat.getDrawable(resources, iconResID, null))
+    } else layoutIcon.visibility = View.GONE
+}
+
+/**
+ * Handle Error from API
+ */
+fun Throwable.handleAPIError(httpErrorAction: (errorMsg: String) -> Unit) {
+    when (this) {
+        is HttpException -> {
+            try {
+                val errBody = Gson().fromJson(response()!!.errorBody()!!.string(), ErrorResponse::class.java)
+                httpErrorAction.invoke(errBody.message)
+            } catch (e: Exception) {
+                httpErrorAction.invoke(this.message())
+            }
+        }
+        is IOException -> {
+            httpErrorAction.invoke("Network error occurred. Please try again")
+        }
+        else -> {
+            httpErrorAction.invoke("Unexpected Error : " + this.message)
+        }
     }
-    else layoutIcon.visibility = View.GONE
 }
