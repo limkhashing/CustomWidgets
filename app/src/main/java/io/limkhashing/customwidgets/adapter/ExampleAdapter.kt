@@ -13,11 +13,11 @@ class ExampleAdapter(private val interaction: Interaction? = null) : RecyclerVie
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Savings>() {
         override fun areItemsTheSame(oldItem: Savings, newItem: Savings): Boolean {
-            return false
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Savings, newItem: Savings): Boolean {
-            return false
+            return oldItem.outletName == newItem.outletName
         }
     }
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
@@ -42,6 +42,7 @@ class ExampleAdapter(private val interaction: Interaction? = null) : RecyclerVie
         fun bind(item: Savings) = with (binding) {
             binding.item = item
             executePendingBindings()
+            // use BindingAdapters to load URL image
 //            Glide.with(binding.root.context)
 //                .load(R.drawable.sample)
 //                .into(binding.ivOutletLogo)

@@ -10,13 +10,12 @@ import android.util.TypedValue
 import android.view.Gravity.CENTER
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import io.limkhashing.customwidgets.R
-import java.util.*
+import java.util.ArrayList
 
 class OtpView : LinearLayout, View.OnFocusChangeListener, TextWatcher, View.OnKeyListener {
     private var numberOfOtp = 4
@@ -43,11 +42,15 @@ class OtpView : LinearLayout, View.OnFocusChangeListener, TextWatcher, View.OnKe
     }
 
     private fun init(context: Context) {
-        var lp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        lp.gravity = CENTER
+        val linearLayoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        linearLayoutParams.gravity = CENTER
         this.orientation = HORIZONTAL
-        this.layoutParams = lp
+        this.layoutParams = linearLayoutParams
         fieldsList = ArrayList()
+
+        val editTextLayoutParams = LayoutParams(dpToPixels(65f), LayoutParams.WRAP_CONTENT)
+        editTextLayoutParams.setMargins(dpToPixels(20f), dpToPixels(10f), dpToPixels(0f), dpToPixels(10f))
+        editTextLayoutParams.weight = 0.25F
 
         // Adding OTP Fields
         for (i in 0 until numberOfOtp) {
@@ -58,11 +61,8 @@ class OtpView : LinearLayout, View.OnFocusChangeListener, TextWatcher, View.OnKe
             field.inputType = InputType.TYPE_CLASS_NUMBER
             field.tag = "EditText:$i"
             field.setBackgroundResource(R.drawable.otp_bg)
-            field.setPadding(getPX(10f), getPX(10f), getPX(10f), getPX(10f))
 
-            lp = LayoutParams(getPX(65f), ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.setMargins(getPX(20f), getPX(8f), getPX(16f), getPX(8f))
-            field.layoutParams = lp
+            field.layoutParams = editTextLayoutParams
             field.isCursorVisible = true
             field.onFocusChangeListener = this
             field.addTextChangedListener(this)
@@ -113,13 +113,9 @@ class OtpView : LinearLayout, View.OnFocusChangeListener, TextWatcher, View.OnKe
         this.otpListener = otpListener
     }
 
-    private fun getPX(dip: Float): Int {
-        val r = resources
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dip,
-            r.displayMetrics
-        ).toInt()
+    private fun dpToPixels(dps: Float): Int {
+        val scale = resources.displayMetrics.density
+        return (dps * scale + 0.5f).toInt()
     }
 
     private fun moveFocusForward() {
@@ -194,10 +190,5 @@ class OtpView : LinearLayout, View.OnFocusChangeListener, TextWatcher, View.OnKe
 
     interface OTPListener {
         fun onOTPEntered(otpText: String)
-    }
-
-    enum class OtpState() {
-        VERIFY_OTP,
-        RESEND_OTP
     }
 }

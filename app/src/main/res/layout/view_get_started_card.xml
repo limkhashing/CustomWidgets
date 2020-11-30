@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="background"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="text"
+            type="String" />
+
+        <variable
+            name="color"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_huge"
+        android:paddingEnd="@dimen/spacing_huge">
+
+        <ImageView
+            android:id="@+id/img_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@{background}"
+            android:layout_marginTop="@dimen/spacing_middle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/get_started_card_1" />
+
+        <TextView
+            android:id="@+id/txt_card_title"
+            style="@style/Maple.Title.XL"
+            android:layout_width="@dimen/size_160"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_very_large"
+            android:text="@{text}"
+            android:textColor="@{color}"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/img_card"
+            app:layout_constraintStart_toStartOf="@+id/img_card"
+            app:layout_constraintTop_toTopOf="@id/img_card"
+            tools:text="Know About Maple. You’ll Love Us!" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,4 +7,17 @@
     <string name="cta_find_stores">Find stores</string>
     <string name="cta_dismiss">Dismiss</string>
     <string name="cta_retry">Retry</string>
+
+    <string name="distance_meter">%.0f M</string>
+    <string name="distance_kilometer">%.0f KM</string>
+
+    <string name="drawer_nav_saving">Savings</string>
+    <string name="drawer_nav_trans">All Transactions</string>
+    <string name="drawer_nav_acc">Account &amp; Settings</string>
+    <string name="drawer_nav_support">Support</string>
+    <string name="drawer_nav_logout">Log Out</string>
+    <string name="option_save">Save</string>
+    <string name="option_take_photo">Take Photo</string>
+    <string name="option_choose_photo">Choose Photo</string>
+    <string name="option_delete_photo">Delete Photo</string>
 </resources>

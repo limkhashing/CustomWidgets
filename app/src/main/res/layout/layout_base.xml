@@ -1,0 +1,155 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <variable
+            name="viewModel"
+            type="io.limkhashing.customwidgets.core.BaseViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:fitsSystemWindows="false">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:elevation="0dp"
+                app:elevation="0dp"
+                bind:onOffsetChangedListener="@{viewModel.onOffsetChangedListener}" />
+
+            <FrameLayout
+                android:id="@+id/viewStub"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <FrameLayout
+                android:id="@+id/viewStubBottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- empty view -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.emptyViewVisibility, default=gone}">
+
+                    <ImageView
+                        android:id="@+id/iv_empty_state"
+                        android:layout_width="@dimen/size_100"
+                        android:layout_height="@dimen/size_100"
+                        android:layout_gravity="center"
+                        android:background="@drawable/view_circle_gray"
+                        android:padding="@dimen/spacing_very_large"
+                        android:src="@{viewModel.emptyViewIcon}"
+                        android:visibility="@{viewModel.emptyViewIconVisibility}"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/Custom.Title.XL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_very_large"
+                        android:text="@{viewModel.emptyViewTitle}"
+                        android:textStyle="bold"
+                        tools:text="No transactions yet" />
+
+                    <TextView
+                        style="@style/Custom.Subtitle.L"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:layout_marginEnd="@dimen/spacing_huge"
+                        android:gravity="center"
+                        android:lineSpacingExtra="@dimen/spacing_tiny"
+                        android:text="@{viewModel.emptyViewDescription}"
+                        tools:text="Pay using UPI at your favourite store and\nearn amazing cashbacks!" />
+
+                    <TextView
+                        android:id="@+id/btn_make_payment"
+                        style="@style/Custom.Button.Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_very_large"
+                        android:gravity="center"
+                        android:onClick="@{viewModel::onEmptyViewButtonClicked}"
+                        android:paddingStart="@dimen/spacing_very_huge"
+                        android:paddingEnd="@dimen/spacing_very_huge"
+                        android:visibility='@{viewModel.emptyViewButtonText != null}'
+                        android:text="@{viewModel.emptyViewButtonText}"
+                        tools:text="Find stores" />
+                </LinearLayout>
+
+                <!-- error view -->
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="@dimen/margin_large"-->
+<!--                    android:visibility="@{viewModel.errorVisibility, default=gone}"-->
+<!--                    tools:visibility="gone">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@{viewModel.errorIcon}"-->
+<!--                        tools:ignore="ContentDescription"-->
+<!--                        tools:src="@drawable/ic_launcher_foreground" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="@dimen/margin_normal"-->
+<!--                        android:text="@{viewModel.errorTitle}"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/text_size_16"-->
+<!--                        tools:text="@string/msg_error_http_title" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="@dimen/margin_large"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="@{viewModel.errorDescription}"-->
+<!--                        android:textSize="@dimen/text_size_14"-->
+<!--                        tools:text="@string/msg_error_http" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="@dimen/margin_large"-->
+<!--                        android:onClick="@{viewModel::onRetryClicked}"-->
+<!--                        android:padding="@dimen/margin_large"-->
+<!--                        android:text="@{viewModel.retryButtonText}"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/text_size_16"-->
+<!--                        tools:text="@string/msg_error_http_button" />-->
+<!--                </LinearLayout>-->
+            </FrameLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

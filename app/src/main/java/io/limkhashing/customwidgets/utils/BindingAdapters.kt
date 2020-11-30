@@ -36,7 +36,7 @@ fun setImageViewUrl(imageView: ImageView, url: String?, drawable: Drawable?, rou
     requestBuilder.into(imageView)
 }
 
-@BindingAdapter("visibility")
+@BindingAdapter("android:visibility")
 fun setVisibility(view: View, value: Boolean?) {
     value?.let {
         view.visibility = if (it) View.VISIBLE else View.GONE
@@ -77,4 +77,21 @@ fun setOnSwitchClicked(switchCompat: SwitchCompat, switchAction: SingleOnClickLi
             switchAction.onClickAction.invoke(view)
         return@setOnTouchListener true
     }
+}
+
+/**
+ * This adapter is for dynamically set TextView drawable and fix vector drawable crashes on Android 5
+ * https://stackoverflow.com/questions/63479754/getting-appdrawableendcompat-instead-of-androiddrawableend-warning-for-lollipo
+ */
+@BindingAdapter(value = ["drawableResource", "left", "top", "right", "bottom"], requireAll = false)
+fun setDrawableVectorCompat(textView: TextView, drawableResource: Int, left: Boolean?, top: Boolean?, right: Boolean?, bottom: Boolean?) {
+    if (left == true) textView.setCompoundDrawablesWithIntrinsicBounds(drawableResource, 0, 0, 0)
+    if (top == true) textView.setCompoundDrawablesWithIntrinsicBounds(0, drawableResource, 0, 0)
+    if (right == true) textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawableResource, 0)
+    if (bottom == true) textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, drawableResource)
+}
+
+@BindingAdapter("android:textStyle")
+fun setTextStyle(v: TextView, style: Int) {
+    v.setTypeface(null, style)
 }

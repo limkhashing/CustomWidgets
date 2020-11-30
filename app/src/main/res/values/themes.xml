@@ -135,4 +135,14 @@
     <style name="Custom.EditText.Black.Underline" parent="@android:style/Widget.EditText">
         <item name="android:backgroundTint">@color/black</item>
     </style>
+
+    <style name="Maple.SplashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/ic_splash</item>
+    </style>
+
+    <style name="SlideDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
+        <item name="android:animationDuration">100</item>
+    </style>
 </resources>

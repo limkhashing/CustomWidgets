@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_large">
+
+        <TextView
+            android:id="@+id/option_take_photo"
+            style="@style/Custom.Title.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:text="@string/option_take_photo" />
+
+        <TextView
+            android:id="@+id/option_choose_photo"
+            style="@style/Custom.Title.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:text="@string/option_choose_photo" />
+
+        <TextView
+            android:id="@+id/option_delete_photo"
+            style="@style/Custom.Title.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:textColor="@android:color/holo_red_light"
+            android:text="@string/option_delete_photo" />
+
+        <TextView
+            android:id="@+id/option_cancel"
+            style="@style/Custom.Title.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:text="@string/cta_cancel" />
+
+    </LinearLayout>
+</layout>
